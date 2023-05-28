@@ -1,4 +1,3 @@
-require('dotenv').config()
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
@@ -167,7 +166,7 @@ botly.on("message", async (senderId, message, data) => {
               } else {
                 const add = user.searchnums + 1;
                 if (isnum == true) {
-                    await db.put({lastsearch: timer, searchnums: add}, senderId)
+                    await db.update({lastsearch: timer, searchnums: add}, senderId)
                     .then((data) => {
                         eval(
                             search.searchPhone(
@@ -186,7 +185,7 @@ botly.on("message", async (senderId, message, data) => {
               }
             } else if (time > user.lastsearch) {
               if (isnum == true) {
-                await db.put({lastsearch: timer, searchnums: 1}, senderId)
+                await db.update({lastsearch: timer, searchnums: 1}, senderId)
                     .then((data) => {
                         eval(
                             search.searchPhone(
@@ -252,7 +251,7 @@ botly.on("message", async (senderId, message, data) => {
                     });
                   }
                 } else if (time > user.lastsms) {
-                    await db.put({phone: null, smsid: null, lastsms: time, smsed: false}, senderId)
+                    await db.update({phone: null, smsid: null, lastsms: time, smsed: false}, senderId)
                     .then((data) => {
                         botly.sendText({
                             id: senderId,
@@ -413,17 +412,17 @@ botly.on("postback", async (senderId, message, postback, data, ref) => {
           text: "حسنا 🆗 يرجى إدخال رقم هاتف اخر الان 🤔",
         });
       } else if (postback == "free") {
-        await db.put({ token: null, mode: postback }, senderId)
+        await db.update({ token: null, mode: postback }, senderId)
         .then((data) => {
             botly.sendText({ id: senderId, text: "تم حفظ حسابك بنجاح ☑️" });
         });
       } else if (postback == "delaccount") {
-        await db.put({token: null, phone: null, lastsms: null, smsid: null, smsed: false, mode: "free"}, senderId)
+        await db.update({token: null, phone: null, lastsms: null, smsid: null, smsed: false, mode: "free"}, senderId)
         .then((data) => {
             botly.sendText({ id: senderId, text: "تم حذف حسابك بنجاح ☑️" });
         });
       } else if (postback == "paid") {
-        await db.put({token: null, phone: null, lastsms: null, smsid: null, smsed: false, mode: postback}, senderId)
+        await db.update({token: null, phone: null, lastsms: null, smsid: null, smsed: false, mode: postback}, senderId)
         .then((data) => {
             botly.sendText({id: senderId, text: "تم حفظ حسابك بنجاح ☑️ الرجاء كتابة رقم هاتفك لكي تبدأ عملية التوثيق 💁‍♂️"});
         });

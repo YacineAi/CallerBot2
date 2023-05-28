@@ -51,16 +51,7 @@ const sendSMS = (senderId, phone, country, phonecode) => {
     .then(async (response) => {
       if (response.data.status == 1) {
         const smsTimer = new Date().getTime() + 5 * 60 * 1000;
-        await db
-          .put(
-            {
-              phone: phone,
-              smsed: true,
-              lastsms: smsTimer,
-              smsid: response.data.requestId,
-            },
-            senderId
-          )
+        await db.update({phone: phone, smsed: true, lastsms: smsTimer, smsid: response.data.requestId}, senderId)
           .then((data) => {
             botly.sendText({
               id: senderId,
@@ -93,8 +84,7 @@ const verifySMS = (senderId, phone, country, phonecode, smsid, vercode) => {
   axiosInstance.post(`https://account-asia-south1.truecaller.com/v1/verifyToken`, verifyData)
     .then(async (response) => {
       if (response.data.status == 2) {
-        await db
-          .put({ token: response.data.installationId }, senderId)
+        await db.update({ token: response.data.installationId }, senderId)
           .then((data) => {
             botly.sendButtons({
               id: senderId,
