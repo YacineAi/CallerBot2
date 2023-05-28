@@ -30,7 +30,6 @@ const searchPhone = async (senderId, country, query) => {
       )
       .then(
         (response) => {
-          console.log(response.data.data);
           if (response.data.data[0]) {
             if (response.data.data[0].value.name) {
               botly.sendGeneric({

@@ -302,7 +302,6 @@ botly.on("message", async (senderId, message, data) => {
         }
       }
     } else if (message.message.attachments[0].payload.sticker_id) {
-      console.log(message.message.attachments[0].payload.sticker_id);
      // botly.sendText({ id: senderId, text: "(Y)" });
     } else if (message.message.attachments[0].type == "image") {
       botly.sendText({
