@@ -88,7 +88,7 @@ async function searcher(senderId, query, country, token) {
 /* ----- DB ----- */
 const { Deta } = require('deta');
 const deta = Deta();
-const db = deta.Base('users');
+const db = deta.Base('cbot2');
 /* ----- DB ----- */
 app.get("/", function (_req, res) {
     res.sendStatus(200);

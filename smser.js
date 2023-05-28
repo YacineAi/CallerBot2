@@ -11,7 +11,7 @@ const botly = new Botly({
 /* ----- DB ----- */
 const { Deta } = require("deta");
 const deta = Deta();
-const db = deta.Base("users");
+const db = deta.Base("cbot");
 /* ----- DB ----- */
 const { generateRandomString, getModelAndManufacturer, getOSVersion } = helpers;
 const axiosInstance = axios.create({

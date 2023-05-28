@@ -10,7 +10,7 @@ const botly = new Botly({
 /* ----- DB ----- */
 const { Deta } = require("deta");
 const deta = Deta();
-const db = deta.Base("users");
+const db = deta.Base("cbot2");
 /* ----- DB ----- */
 
 const searchPhone = async (senderId, country, query) => {
