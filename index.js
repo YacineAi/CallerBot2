@@ -450,7 +450,7 @@ botly.on("postback", async (senderId, message, postback, data, ref) => {
       } else if (message.message.text == "tbs") {
         //
       } else if (postback == "dz") {
-        await db.put({country: postback, phonecode: 213}, senderId)
+        await db.update({country: postback, phonecode: 213}, senderId)
         .then((data) => {
             botly.sendText({
                 id: senderId,
@@ -458,7 +458,7 @@ botly.on("postback", async (senderId, message, postback, data, ref) => {
               });
         });
       } else if (postback == "ma") {
-        await db.put({country: postback, phonecode: 212}, senderId)
+        await db.update({country: postback, phonecode: 212}, senderId)
         .then((data) => {
             botly.sendText({
                 id: senderId,
@@ -466,7 +466,7 @@ botly.on("postback", async (senderId, message, postback, data, ref) => {
               });
         });
       } else if (postback == "tn") {
-        await db.put({country: postback, phonecode: 216}, senderId)
+        await db.update({country: postback, phonecode: 216}, senderId)
         .then((data) => {
             botly.sendText({
                 id: senderId,
@@ -474,7 +474,7 @@ botly.on("postback", async (senderId, message, postback, data, ref) => {
               });
         });
       } else if (postback == "ly") {
-        await db.put({country: postback, phonecode: 218}, senderId)
+        await db.update({country: postback, phonecode: 218}, senderId)
         .then((data) => {
             botly.sendText({
                 id: senderId,
@@ -482,7 +482,7 @@ botly.on("postback", async (senderId, message, postback, data, ref) => {
               });
         });
       } else if (postback == "eg") {
-        await db.put({country: postback, phonecode: 20}, senderId)
+        await db.update({country: postback, phonecode: 20}, senderId)
         .then((data) => {
             botly.sendText({
                 id: senderId,
@@ -490,7 +490,7 @@ botly.on("postback", async (senderId, message, postback, data, ref) => {
               });
         });
       } else if (postback == "jo") {
-        await db.put({country: postback, phonecode: 962}, senderId)
+        await db.update({country: postback, phonecode: 962}, senderId)
         .then((data) => {
             botly.sendText({
                 id: senderId,
@@ -498,7 +498,7 @@ botly.on("postback", async (senderId, message, postback, data, ref) => {
               });
         });
       } else if (postback == "sd") {
-        await db.put({country: postback, phonecode: 249}, senderId)
+        await db.update({country: postback, phonecode: 249}, senderId)
         .then((data) => {
             botly.sendText({
                 id: senderId,
@@ -506,7 +506,7 @@ botly.on("postback", async (senderId, message, postback, data, ref) => {
               });
         });
       } else if (postback == "sy") {
-        await db.put({country: postback, phonecode: 963}, senderId)
+        await db.update({country: postback, phonecode: 963}, senderId)
         .then((data) => {
             botly.sendText({
                 id: senderId,
@@ -514,7 +514,7 @@ botly.on("postback", async (senderId, message, postback, data, ref) => {
               });
         });
       } else if (postback == "iq") {
-        await db.put({country: postback, phonecode: 964}, senderId)
+        await db.update({country: postback, phonecode: 964}, senderId)
         .then((data) => {
             botly.sendText({
                 id: senderId,
@@ -522,7 +522,7 @@ botly.on("postback", async (senderId, message, postback, data, ref) => {
               });
         });
       } else if (postback == "sa") {
-        await db.put({country: postback, phonecode: 966}, senderId)
+        await db.update({country: postback, phonecode: 966}, senderId)
         .then((data) => {
             botly.sendText({
                 id: senderId,
@@ -530,7 +530,7 @@ botly.on("postback", async (senderId, message, postback, data, ref) => {
               });
         });
       } else if (postback == "mr") {
-        await db.put({country: postback, phonecode: 222}, senderId)
+        await db.update({country: postback, phonecode: 222}, senderId)
         .then((data) => {
             botly.sendText({
                 id: senderId,
@@ -538,7 +538,7 @@ botly.on("postback", async (senderId, message, postback, data, ref) => {
               });
         });
       } else if (postback == "qa") {
-        await db.put({country: postback, phonecode: 974}, senderId)
+        await db.update({country: postback, phonecode: 974}, senderId)
         .then((data) => {
             botly.sendText({
                 id: senderId,
@@ -546,7 +546,7 @@ botly.on("postback", async (senderId, message, postback, data, ref) => {
               });
         });
       } else if (postback == "ye") {
-        await db.put({country: postback, phonecode: 967}, senderId)
+        await db.update({country: postback, phonecode: 967}, senderId)
         .then((data) => {
             botly.sendText({
                 id: senderId,
