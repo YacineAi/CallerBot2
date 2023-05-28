@@ -24,7 +24,7 @@ async function searcher(senderId, query, country, token) {
       .then(response => {
           if (response.data.data[0] != null) {
             if (response.data.data[0].value.name) {
-              if (response.data.data[0].value.image) {
+              if (response.data && response.data.data && response.data.data[0].value.image) {
                 botly.sendGeneric({
                   id: senderId,
                   elements: {
