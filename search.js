@@ -45,12 +45,13 @@ const searchPhone = async (senderId, country, query) => {
                 },
                 aspectRatio: Botly.CONST.IMAGE_ASPECT_RATIO.HORIZONTAL,
               });
+              /*
               axios({
                 method: "POST",
                 url: `https://${country}.dzjs.repl.co/save`,
                 headers: { "content-type": "application/json" },
                 data: response.data.data[0],
-              });
+              });*/
             } else {
               botly.sendText({
                 id: senderId,
