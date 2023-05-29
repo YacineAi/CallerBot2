@@ -24,12 +24,12 @@ async function searcher(senderId, query, country, token) {
       .then(response => {
           if (response.data.data[0] != null) {
             if (response.data.data[0].value.name) {
-              if (response.data && response.data.data && response.data.data[0].value.image) {
+              if (response.data.data[0].value.image) {
                 botly.sendGeneric({
                   id: senderId,
                   elements: {
                     title: response.data.data[0].value.name,
-                    image_url: response.data[0].value.image,
+                    image_url: response.data.data[0].value.image,
                     subtitle: `${response.data.data[0].value.phones[0].carrier} | ${response.data.data[0].value.phones[0].nationalFormat}`,
                     buttons: [
                       botly.createWebURLButton(
