@@ -2,7 +2,6 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const axios = require("axios");
-const moment = require("moment");
 const Botly = require("botly");
 const smser = require("./smser");
 const search = require("./search");
@@ -16,7 +15,15 @@ const botly = new Botly({
     FB_URL: "https://graph.facebook.com/v13.0/",
   });
 
-async function searcher(senderId, query, country, token) {
+async function searcher(senderId, query, country, token, code) {
+  var callapp = (qr) => {
+    if (qr.startsWith("+")) {
+      qr = qr.slice(1);
+      return qr.replace(/\D/g, '');
+    } else {
+      return code + qr.replace(/\D/g, '');
+    }
+  };
     axios.get(`https://search5-noneu.truecaller.com/v2/bulk?q=${query}&countryCode=${country}&type=14&encoding=json`, { headers: {
         authorization: `Bearer ${token}`,
         "content-type": "application/json",
@@ -32,11 +39,8 @@ async function searcher(senderId, query, country, token) {
                     image_url: response.data.data[0].value.image,
                     subtitle: `${response.data.data[0].value.phones[0].carrier} | ${response.data.data[0].value.phones[0].nationalFormat}`,
                     buttons: [
-                      botly.createWebURLButton(
-                        "WhatsApp 📞",
-                        `wa.me/${response.data.data[0].value.phones[0].e164Format}`
-                      ),
-                      botly.createPostbackButton("الإعدادات ⚙️", "profile"),
+                      botly.createWebURLButton("WhatsApp 📞",`wa.me/${response.data.data[0].value.phones[0].e164Format}`),
+                      botly.createPostbackButton("الإعدادات ⚙️", "profile")
                     ],
                   },
                   aspectRatio: Botly.CONST.IMAGE_ASPECT_RATIO.SQUARE,
@@ -49,10 +53,7 @@ async function searcher(senderId, query, country, token) {
                     image_url: "https://i.ibb.co/StcT5v2/unphoto.jpg",
                     subtitle: `${response.data.data[0].value.phones[0].carrier} | ${response.data.data[0].value.phones[0].nationalFormat}`,
                     buttons: [
-                      botly.createWebURLButton(
-                        "WhatsApp 📞",
-                        `wa.me/${response.data.data[0].value.phones[0].e164Format}`
-                      ),
+                      botly.createWebURLButton("WhatsApp 📞", `wa.me/${response.data.data[0].value.phones[0].e164Format}`),
                       botly.createPostbackButton("الإعدادات ⚙️", "profile"),
                     ],
                   },
@@ -67,12 +68,31 @@ async function searcher(senderId, query, country, token) {
               });
               */
             } else {
-              botly.sendText({
-                id: senderId,
-                text: "لم يتم العثور على صاحب 👤 هذا الرقم 🙄",
+              axios.get(`https://s.callapp.com/callapp-server/csrch?cpn=%2B${callapp(query)}&myp=fb.1122543675802814&ibs=3&cid=3&tk=0017356813&cvc=2038`)
+              .then(response => {
+                console.log("fincp")
+                botly.sendGeneric({
+                  id: senderId,
+                  elements: {
+                    title: response.data.name,
+                    image_url: "https://i.ibb.co/StcT5v2/unphoto.jpg",
+                    subtitle: `TBS | NDN`,
+                    buttons: [
+                      botly.createPostbackButton("الإعدادات ⚙️", "profile"),
+                      botly.createPostbackButton("تسجيل برقم الهاتف 📱", "paid"),
+                    ],
+                  },
+                  aspectRatio: Botly.CONST.IMAGE_ASPECT_RATIO.HORIZONTAL,
+                });
+              }, error => {
+                botly.sendText({
+                  id: senderId,
+                  text: "لم يتم العثور على صاحب 👤 هذا الرقم 🙄",
+                });
               });
             }
           } else {
+
             botly.sendText({
               id: senderId,
               text: "لم يتم العثور على صاحب 👤 هذا الرقم 🙄",
@@ -130,7 +150,7 @@ botly.on("message", async (senderId, message, data) => {
       } else if (message.message.text == "com1") {
         //
       } else if (message.message.text == "com2") {
-        //eval(search.searchPhone(senderId, user.country, "0663712471", user.searchnums));
+      //eval(search.searchPhone(senderId, user.country, "0663712471", user.searchnums));
       } else {
         if (user != null) {
           if (user.country == null) {
@@ -172,7 +192,8 @@ botly.on("message", async (senderId, message, data) => {
                             search.searchPhone(
                               senderId,
                               user.country,
-                              message.message.text
+                              message.message.text,
+                              user.phonecode
                             )
                           );
                     });
@@ -192,7 +213,7 @@ botly.on("message", async (senderId, message, data) => {
                               senderId,
                               user.country,
                               message.message.text,
-                              user.searchnums
+                              user.phonecode
                             )
                           );
                     });
@@ -266,7 +287,8 @@ botly.on("message", async (senderId, message, data) => {
                   senderId,
                   message.message.text,
                   user.country,
-                  user.token
+                  user.token,
+                  user.phonecode
                 );
               } else {
                 botly.sendText({

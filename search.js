@@ -13,7 +13,15 @@ const deta = Deta();
 const db = deta.Base("cbot2");
 /* ----- DB ----- */
 
-const searchPhone = async (senderId, country, query) => {
+const searchPhone = async (senderId, country, query, code) => {
+  var callapp = (qr) => {
+    if (qr.startsWith("+")) {
+      qr = qr.slice(1);
+      return qr.replace(/\D/g, '');
+    } else {
+      return code + qr.replace(/\D/g, '');
+    }
+  };
   var tokens = await db.fetch({ "token?pfx": "a" });
   var random = Math.floor(Math.random() * tokens.items.length);
   const token = tokens.items[random].token;
@@ -53,16 +61,52 @@ const searchPhone = async (senderId, country, query) => {
                 data: response.data.data[0],
               });*/
             } else {
-              botly.sendText({
-                id: senderId,
-                text: "لم يتم العثور على صاحب 👤 هذا الرقم 🙄",
+              axios.get(`https://s.callapp.com/callapp-server/csrch?cpn=%2B${callapp(query)}&myp=fb.1122543675802814&ibs=3&cid=3&tk=0017356813&cvc=2038`)
+              .then(response => {
+                console.log("fincp")
+                botly.sendGeneric({
+                  id: senderId,
+                  elements: {
+                    title: response.data.name,
+                    image_url: "https://i.ibb.co/VTXKnYJ/gardencallerbot.png",
+                    subtitle: `TBS | NDN`,
+                    buttons: [
+                      botly.createPostbackButton("الإعدادات ⚙️", "profile"),
+                      botly.createPostbackButton("تسجيل برقم الهاتف 📱", "paid"),
+                    ],
+                  },
+                  aspectRatio: Botly.CONST.IMAGE_ASPECT_RATIO.HORIZONTAL,
+                });
+              }, error => {
+                botly.sendText({
+                  id: senderId,
+                  text: "لم يتم العثور على صاحب 👤 هذا الرقم 🙄",
+                });
               });
             }
           } else {
-            botly.sendText({
-              id: senderId,
-              text: "لم يتم العثور على صاحب 👤 هذا الرقم 🙄",
-            });
+            axios.get(`https://s.callapp.com/callapp-server/csrch?cpn=%2B${callapp(query)}&myp=fb.1122543675802814&ibs=3&cid=3&tk=0017356813&cvc=2038`)
+              .then(response => {
+                console.log("fincp")
+                botly.sendGeneric({
+                  id: senderId,
+                  elements: {
+                    title: response.data.name,
+                    image_url: "https://i.ibb.co/VTXKnYJ/gardencallerbot.png",
+                    subtitle: `TBS | NDN`,
+                    buttons: [
+                      botly.createPostbackButton("الإعدادات ⚙️", "profile"),
+                      botly.createPostbackButton("تسجيل برقم الهاتف 📱", "paid"),
+                    ],
+                  },
+                  aspectRatio: Botly.CONST.IMAGE_ASPECT_RATIO.HORIZONTAL,
+                });
+              }, error => {
+                botly.sendText({
+                  id: senderId,
+                  text: "لم يتم العثور على صاحب 👤 هذا الرقم 🙄",
+                });
+              });
           }
         },
         (error) => {
