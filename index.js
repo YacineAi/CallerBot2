@@ -14,7 +14,11 @@ const botly = new Botly({
     notificationType: Botly.CONST.REGULAR,
     FB_URL: "https://graph.facebook.com/v13.0/",
   });
-
+/* ----- DB ----- */
+const { Deta } = require('deta');
+const deta = Deta();
+const db = deta.Base('cbot2');
+/* ----- DB ----- */
 async function searcher(senderId, query, country, token, code) {
   var callapp = (qr) => {
     if (qr.startsWith("+")) {
@@ -98,18 +102,18 @@ async function searcher(senderId, query, country, token, code) {
               text: "لم يتم العثور على صاحب 👤 هذا الرقم 🙄",
             });
           }
-      }, error => {
-        if (error.response.data == "too many requests") {
-            console.log(error.response.data); 
+      }, async error => {
+        if (error.response.data.status == 40101) {
+          await db.update({token: null, phone: null, lastsms: null, smsid: null, smsed: false, mode: "free"}, senderId)
+          .then((data) => {
+            console.log("PAID-CLN");
+            botly.sendText({ id: senderId, text: "تم إنهاء حسابك. المرجو استعمال رقم اخر. او الإكتفاء بالوضع المجاني" });
+          });
+        } else {
+          
         }
       });
 }
-
-/* ----- DB ----- */
-const { Deta } = require('deta');
-const deta = Deta();
-const db = deta.Base('cbot2');
-/* ----- DB ----- */
 app.get("/", function (_req, res) {
     res.sendStatus(200);
   });

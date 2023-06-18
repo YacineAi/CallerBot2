@@ -24,20 +24,14 @@ const searchPhone = async (senderId, country, query, code) => {
   };
   var tokens = await db.fetch({ "token?pfx": "a" });
   var random = Math.floor(Math.random() * tokens.items.length);
-  const token = tokens.items[random].token;
-  var research = function (token) {
-    axios
-      .get(
-        `https://search5-noneu.truecaller.com/v2/bulk?q=${query}&countryCode=${country}&type=14&encoding=json`,
-        {
+  var research = function (token, key) {
+    axios.get(`https://search5-noneu.truecaller.com/v2/bulk?q=${query}&countryCode=${country}&type=14&encoding=json`, {
           headers: {
             authorization: `Bearer ${token}`,
             "content-type": "application/json",
           },
-        }
-      )
-      .then(
-        (response) => {
+        })
+      .then((response) => {
           if (response.data.data[0]) {
             if (response.data.data[0].value.name) {
               botly.sendGeneric({
@@ -109,18 +103,23 @@ const searchPhone = async (senderId, country, query, code) => {
               });
           }
         },
-        (error) => {
-          //console.log(error.response.data);
+        async (error) => {
           const retry = async () => {
             var retokens = await db.fetch({ "token?pfx": "a" });
             var rerandom = Math.floor(Math.random() * retokens.items.length);
-            var retoken = retokens.items[rerandom].token;
-            research(retoken);
+            research(retokens.items[rerandom].token, retokens.items[rerandom].key);
           };
-          retry();
-        }
-      );
-  };
-  research(token);
-};
+          if (error.response.data.status == 40101) {
+            await db.update({token: null, phone: null, lastsms: null, smsid: null, smsed: false, mode: "free"}, key)
+            .then((data) => {
+              console.log("DB-CLN");
+              retry();
+            });
+          } else {
+            retry();
+          }
+        });
+      };
+      research(tokens.items[random].token, tokens.items[random].key);
+    };
 exports.searchPhone = searchPhone;
