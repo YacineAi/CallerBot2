@@ -45,7 +45,7 @@ const sendSMS = (senderId, phone, country, phonecode) => {
       language: "en",
     },
     phoneNumber: phone,
-    sequenceNo: 3,
+    sequenceNo: 4,
   };
   axiosInstance.post(`https://account-asia-south1.truecaller.com/v1/sendToken`, deviceData)
     .then(async (response) => {
