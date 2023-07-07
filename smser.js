@@ -25,27 +25,28 @@ const axiosInstance = axios.create({
 const sendSMS = (senderId, phone, country, phonecode) => {
   var deviceDetails = getModelAndManufacturer();
   const deviceData = {
-    "countryCode": country,
-    "dialingCode": phonecode,
-    "installationDetails": {
-      "app": {
-        "buildVersion": 6,
-        "majorVersion": 10,
-        "minorVersion": 57,
-        "store": "GOOGLE_PLAY",
+    countryCode: country,
+    dialingCode: phonecode,
+    installationDetails: {
+      app: {
+        buildVersion: 6,
+        majorVersion: 10,
+        minorVersion: 57,
+        store: "GOOGLE_PLAY",
       },
-      "device": {
-        "deviceId": generateRandomString(16),
-        "language": "en",
-        "manufacturer": deviceDetails.manufacturer,
-        "model": deviceDetails.model,
-        "osName": "Android",
-        "osVersion": getOSVersion(),
+      device: {
+        deviceId: generateRandomString(16),
+        language: "en",
+        manufacturer: deviceDetails.manufacturer,
+        model: deviceDetails.model,
+        osName: "Android",
+        osVersion: getOSVersion(),
       },
       "language": "en",
     },
-    "region": "region-2",
-    "sequenceNo": 3
+    phoneNumber: phone,
+    region: "region-2",
+    sequenceNo: 3
   };
   axiosInstance.post(`https://account-asia-south1.truecaller.com/v2/sendOnboardingOtp`, deviceData)
     .then(async (response) => {
