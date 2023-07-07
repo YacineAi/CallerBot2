@@ -47,9 +47,10 @@ const sendSMS = (senderId, phone, country, phonecode) => {
     phoneNumber: phone,
     sequenceNo: 4,
   };
-  axiosInstance.post(`https://account-asia-south1.truecaller.com/v1/sendToken`, deviceData)
+  axiosInstance.post(`https://account-asia-south1.truecaller.com/v3/sendToken`, deviceData)
     .then(async (response) => {
       if (response.data.status == 1) {
+       console.log(response.data)
         const smsTimer = new Date().getTime() + 5 * 60 * 1000;
         await db.update({phone: phone, smsed: true, lastsms: smsTimer, smsid: response.data.requestId}, senderId)
           .then((data) => {
