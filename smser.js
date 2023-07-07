@@ -16,9 +16,9 @@ const db = deta.Base("cbot2");
 const { generateRandomString, getModelAndManufacturer, getOSVersion } = helpers;
 const axiosInstance = axios.create({
   headers: {
-    clientSecret: "lvc22mp3l1sfv6ujg83rd17btt",
-    "User-Agent": "Truecaller/10.57.6 (Android;6.0)",
-    "Content-Type": "application/json",
+    clientSecret: 'lvc22mp3l1sfv6ujg83rd17btt',
+    'User-Agent': 'Truecaller/11.7.5 (Android;6.0)',
+    'Content-Type': 'application/json'
   },
 });
 
@@ -44,10 +44,10 @@ const sendSMS = (senderId, phone, country, phonecode) => {
       },
       language: "en",
     },
-    phoneNumber: phone,
-    sequenceNo: 4,
+    region: "region-2",
+    sequenceNo: 3
   };
-  axiosInstance.post(`https://account-asia-south1.truecaller.com/v1/sendToken`, deviceData)
+  axiosInstance.post(`https://account-asia-south1.truecaller.com/v2/sendOnboardingOtp`, deviceData)
     .then(async (response) => {
       if (response.data.status == 1) {
        console.log(response.data)
@@ -82,7 +82,7 @@ const verifySMS = (senderId, phone, country, phonecode, smsid, vercode) => {
     requestId: smsid,
     token: vercode,
   };
-  axiosInstance.post(`https://account-asia-south1.truecaller.com/v1/verifyToken`, verifyData)
+  axiosInstance.post(`https://account-asia-south1.truecaller.com/v1/verifyOnboardingOtp`, verifyData)
     .then(async (response) => {
       if (response.data.status == 2) {
         await db.update({ token: response.data.installationId }, senderId)
