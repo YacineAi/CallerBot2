@@ -21,7 +21,13 @@ const axiosInstance = axios.create({
     'Content-Type': 'application/json'
   },
 });
-
+const seq = (reg) => {
+if (reg == "dz") {
+  return 3
+} else {
+  return 4
+}
+};
 const sendSMS = (senderId, phone, country, phonecode) => {
   var deviceDetails = getModelAndManufacturer();
   const deviceData = {
@@ -46,7 +52,7 @@ const sendSMS = (senderId, phone, country, phonecode) => {
     },
     phoneNumber: phone,
     region: "region-2",
-    sequenceNo: 3
+    sequenceNo: seq(country)
   };
   axiosInstance.post(`https://account-asia-south1.truecaller.com/v2/sendOnboardingOtp`, deviceData)
     .then(async (response) => {
